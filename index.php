@@ -14,7 +14,7 @@ getHead("index.php");
     	<div class="row">
 	     	<div class="span4" style="text-align: center">
 	    		<img src="img/book.png" />
-	      	</div>
+	      	</div> 
 	      	<div class="span8">
 	      		<h1 class="headline">HXL Documentation</h1>
 		        <p class="punchline">The official guide to the Humanitarian eXchange Language.<br />Learn how to <a href="queries.php">get data out of HXL</a> and how to <a href="produce.php">produce, publish, and manage HXL data</a> yourself.</p>	     

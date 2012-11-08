@@ -81,8 +81,9 @@ function getFoot(){
 		  <div class="span3"><strong>Links</strong><br />
 		  <a href="https://sites.google.com/site/hxlproject/">HXL Project</a><br />
 		  <a href="http://hxl.humanitarianresponse.info/">HXL Standard</a></div>
-		  <div class="span3"><strong>Follow HXL</strong><br />
-		  <span class="label label-warning">TBD</span></div>
+		  <div class="span3"><strong>Updates</strong><br />
+		  This part of the docs has been last updated on <strong><?php echo date("M d, Y", filemtime(pathinfo($_SERVER['REQUEST_URI'])['basename']));  ?></strong> by <a href="http://carsten.io">Carsten Keßler</a>.
+      </div>
 		  <div class="span3"><strong>Legal</strong><br />
 		  &copy; 2012 UNOCHA</div>
 		</div>
