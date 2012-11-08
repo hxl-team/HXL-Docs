@@ -22,8 +22,8 @@ echo'<!DOCTYPE html>
     <meta http-equiv="expires" content="0"> 
     <meta http-equiv="pragma" content="no-cache"> 
 
-    <link href="css/hxl.css" rel="stylesheet">
-  
+    <link href="css/hxl.css" rel="stylesheet">    
+
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -31,7 +31,7 @@ echo'<!DOCTYPE html>
     <link rel="shortcut icon" href="img/favicon.ico">
   </head>
 
-  <body data-spy="scroll" data-target=".navspy">
+  <body data-spy="scroll" data-target=".navspy" onload="prettyPrint()">
 	<div class="container">
 	<div class="navbar">
         <div class="container">
@@ -78,18 +78,18 @@ function getFoot(){
 		  <div class="span3"><strong>Contact</strong><br />
 		  This site is part of the HumanitarianResponse network. Write to 
 		  <a href="mailto:info@humanitarianresponse.info">info@humanitarianresponse.info</a> for more information.</div>
-		  <div class="span3"><strong>Links</strong><br />
-		  <a href="https://sites.google.com/site/hxlproject/">HXL Project</a><br />
-		  <a href="http://hxl.humanitarianresponse.info/">HXL Standard</a></div>
 		  <div class="span3"><strong>Updates</strong><br />
 		  This part of the docs has been last updated on <strong><?php echo date("M d, Y", filemtime(pathinfo($_SERVER['REQUEST_URI'])['basename']));  ?></strong> by <a href="http://carsten.io">Carsten Keßler</a>.
       </div>
+      <div class="span3"><strong>Elsewhere</strong><br />
+      The entire code for HXL and the tools we are building around the standard is available on <a href="https://github.com/hxl-team">GitHub</a>.</div>      
 		  <div class="span3"><strong>Legal</strong><br />
 		  &copy; 2012 UNOCHA</div>
 		</div>
 	</div>
 	  <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="js/bootstrap.min.js"></script> 
+    <script src="js/prettify.js"></script>
   </body>
 </html>
 

@@ -166,9 +166,82 @@ div.start{
 .sidenav {
   width: 200px;
   margin: 80px 0 20px 50px;
+  text-align: left;
 }
 
 .sidenav > li.active > a {
   color: @white;
   background-color: @red;
+}
+
+h2{
+	margin-top: 60px;
+}
+
+.execute{
+	margin-top: -50px;
+}
+
+
+// prettyprint stuff for the code examples:
+
+.com { color: #B91222; }
+.lit { color: #B91222; } 
+.pun, .opn, .clo { color: #B91222; }
+.fun { color: #B91222; }
+.str, .atv { color: #B91222; }
+.kwd, .prettyprint .tag { color: #B91222; }
+.typ, .atn, .dec, .var { color: #B91222; }
+.pln { color: #B91222; }
+
+.prettyprint {
+  padding: 8px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+}
+.prettyprint.linenums {
+  -webkit-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+     -moz-box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+          box-shadow: inset 40px 0 0 #fbfbfc, inset 41px 0 0 #ececf0;
+}
+
+/* Specify class=linenums on a pre to get line numbering */
+ol.linenums {
+  margin: 0 0 0 33px; /* IE indents via margin-left */
+}
+ol.linenums li {
+  padding-left: 12px;
+  color: #bebec5;
+  line-height: 20px;
+  text-shadow: 0 1px 0 #fff;
+}
+
+
+/*  Styling the examles: */
+
+.example {
+	position: relative;
+	margin: 15px 0 -4px 0;
+	padding: 39px 19px 14px;
+	background-color: white;
+	border: 1px solid #DDD;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.example::after {
+	content: "Example";
+	position: absolute;
+	top: -1px;
+	left: -1px;
+	padding: 3px 7px;
+	font-size: 12px;
+	font-weight: bold;
+	background-color: whiteSmoke;
+	border: 1px solid #DDD;
+	color: #9DA0A4;
+	-webkit-border-radius: 4px 0 4px 0;
+	-moz-border-radius: 4px 0 4px 0;
+	border-radius: 4px 0 4px 0;
 }
