@@ -192,6 +192,30 @@ SELECT * WHERE {
   ?population rdf:type/rdfs:subClassOf* hxl:Population .
 }</pre><a href="http://sparql.carsten.io/?query=prefix%20rdf%3A%20%3Chttp%3A//www.w3.org/1999/02/22-rdf-syntax-ns%23%3E%20%0Aprefix%20rdfs%3A%20%3Chttp%3A//www.w3.org/2000/01/rdf-schema%23%3E%20%0Aprefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20*%20WHERE%20%7B%0A%20%20%3Fpopulation%20rdf%3Atype/rdfs%3AsubClassOf*%20hxl%3APopulation%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
 
+<h3>Some math</h3>
+
+<div class="example">
+  					<p>A more complex example which queries the latest overall population numbers per location in the Mali crisis. The <code>MAX</code> syntax gets us only the latest dates, and the <code>SUM</code> adds up the person counts for the different types of population at the given place.</p>
+				</div>
+				<pre class="prettyprint linenums">prefix ogc: &lt;http://www.opengis.net/ont/geosparql#&gt; 
+prefix hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
+
+SELECT (MAX(?valid) as ?latest) ?location ?locationName ?wkt (SUM(?count) AS ?totalRefugees) WHERE {
+  
+  GRAPH ?g {
+    ?g hxl:aboutEmergency &lt;http://hxl.humanitarianresponse.info/data/emergencies/mali2012test&gt; ; 
+       hxl:validOn ?valid .
+    ?pop a hxl:RefugeesAsylumSeekers ; 
+           hxl:personCount ?count ;
+           hxl:atLocation  ?location .
+  }
+  ?location hxl:featureName ?locationName;
+            ogc:hasGeometry ?geom .
+  ?geom ogc:hasSerialization ?wkt .
+  
+} GROUP BY ?location ?locationName ?wkt 
+ORDER BY ?locationName</pre><a href="http://sparql.carsten.io/?query=prefix%20ogc%3A%20%3Chttp%3A//www.opengis.net/ont/geosparql%23%3E%20%0Aprefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20%28MAX%28%3Fvalid%29%20as%20%3Flatest%29%20%3Flocation%20%3FlocationName%20%3Fwkt%20%28SUM%28%3Fcount%29%20AS%20%3FtotalRefugees%29%20WHERE%20%7B%0A%20%20%0A%20%20GRAPH%20%3Fg%20%7B%0A%20%20%20%20%3Fg%20hxl%3AaboutEmergency%20%3Chttp%3A//hxl.humanitarianresponse.info/data/emergencies/mali2012test%3E%20%3B%20%0A%20%20%20%20%20%20%20hxl%3AvalidOn%20%3Fvalid%20.%0A%20%20%20%20%3Fpop%20a%20hxl%3ARefugeesAsylumSeekers%20%3B%20%0A%20%20%20%20%20%20%20%20%20%20%20hxl%3ApersonCount%20%3Fcount%20%3B%0A%20%20%20%20%20%20%20%20%20%20%20hxl%3AatLocation%20%20%3Flocation%20.%0A%20%20%7D%0A%20%20%3Flocation%20hxl%3AfeatureName%20%3FlocationName%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20ogc%3AhasGeometry%20%3Fgeom%20.%0A%20%20%3Fgeom%20ogc%3AhasSerialization%20%3Fwkt%20.%0A%20%20%0A%7D%20GROUP%20BY%20%3Flocation%20%3FlocationName%20%3Fwkt%20ORDER%20BY%20%3FlocationName&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+
   			<h2 id="geo">Geodata in HXL</h2>
   				<p>yadda...</p>
   			</div>
