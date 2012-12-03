@@ -25,8 +25,12 @@ getHead("queries.php");
   			</div>
   			<div class="span8">
   				<h1>Querying HXL</h1>
-		        <p class="punchline">Intro yadda...</p>	     
-	    
+		        <p class="punchline">This tutorial explains how to access HXL data, including crash courses on Linked Data and the SPARQL query language.</p>	     	    
+
+
+<!--   LINKED DATA 101 SECTION  -->
+
+
 
   			<h2 id="ld">Linked Data 101</h2>
 
@@ -36,12 +40,12 @@ getHead("queries.php");
 
 					<p><a href="http://en.wikipedia.org/wiki/Tim_Berners-Lee">Tim Berners-Lee</a> is not only quoted for developing the basics of the Web as we know it today, he also constantly thinks about the next steps &ndash; one of them being Linked Data. In 2006, he published these four rules, also known as the <em>Linked Data principles</em>, <a href="http://www.w3.org/DesignIssues/LinkedData.html">on his blog</a>:</p>
 					
-					<ul>
+					<ol>
 						<li>Use URIs as names for things.</li>
 						<li>Use HTTP URIs so that people can look up those names.</li>
 						<li>When someone looks up a URI, provide useful information, using the standards (RDF*, SPARQL).</li>
 						<li>Include links to other URIs. so that they can discover more things.</li>
-					</ul>
+					</ol>
 					
 					<p>In a nutshell, these rules transfer the idea of interlinked, human-readable documents (aka. the Web as we know it), to raw data: Instead of jumping from one web page to the next by clicking links on that page, we have datasets that refer to each other and thus create a <em>Web of Data</em>. Let's take a look at how that works:</p>
 
@@ -61,7 +65,7 @@ getHead("queries.php");
 					
 				<h3>Creating a graph by combining statements</h3>
 
-					<p>The concept of the statement becomes really powerful once we start combining several statements. Let's extent our Batman example a bit: (Since the full URIs blow up the statements, RDF supports the same <em>prefix</em> mechanism as XML.)</p>
+					<p>The concept of the statement becomes really powerful once we start combining several statements. Let's extent our Batman example a bit; in this example, we use prefixes (lines 1&ndash;6) to declare the different name spaces used in the rest of the document, to make the URIs shorter and more readable:</p>
 
 					<pre class="prettyprint linenums">@prefix foaf: 	   &lt;<a href="http://xmlns.com/foaf/0.1/" target="_blank">http://xmlns.com/foaf/0.1/</a>&gt; .
 @prefix dbp: 	   &lt;<a href="http://dbpedia.org/resource/" target="_blank">http://dbpedia.org/resource/</a>&gt; .
@@ -87,38 +91,82 @@ getHead("queries.php");
 
 				<h3>Shared Vocabularies</h3>
 					
-					<p>TBD</p>	
+					<p>The previous example already demonstrates the reuse of shared vocabularies, as it uses the DBpedia, GeoNames, and W3C WGS84 vocabularies. Reusing existing vocabularies increases the oddds that a linked dataset is being reusing, as existing vocabularies (especially the ubiquitous ones such as <a href="http://xmlns.com/foaf/spec/">FOAF</a>, <a href="http://purl.org/dc/terms/">DC</a>, or <a href="http://www.w3.org/2004/02/skos/">SKOS</a>) are often already known to potential data consumbers. A good place to look for existing vocabularies is the <a href="http://lov.okfn.org/dataset/lov/">Linked Open Vocabularies</a> website.</p>
+
+					<p><strong>HXL provides such a shared vocabulary for the humanitarian domain.</strong> So far, such a vocabulary does not exist, apart from the <a href="http://observedchange.com/moac/ns/">Management of a Crisis</a> (MOAC) vocabulary (see <a href="http://ceur-ws.org/Vol-798/paper2.pdf">this paper</a> for details). MOAC has certainly inspired HXL; however, we chose to redefine the classes and properties shared with HXL, instead of importing them, to make sure that the vocabulary is under control of UN OCHA. However, we did reuse classes and properties from broadly use vocabularies where unexpected changes are unlikely, such as <a href="http://xmlns.com/foaf/spec/">FOAF</a>, the Open Geospatial Consortium's <a href="http://www.opengis.net/ont/geosparql">GeoSPARQL ontology</a>, <a href="http://purl.org/dc/terms/">DC</a>, and <a href="http://www.w3.org/2004/02/skos/">SKOS</a>,</p>
 
 				<h3>Why Linked Data?</h3>
 					
-					<p>TBD: Distributed, extensible, reuse of vocabularies, semantic annotations, forces nobody to change their systems, inference</p>
+					<p>As the name suggests, the original idea for HXL was to develop an XML schema that allows humanitarian organisation to publish XML adhering to this schema. We then went for a Linked Data approach for a number of reasons:</p>  
 
+					<ul>
+						<li><strong>Extensibility.</strong> HXL can only provide the core classes and properties for the domain. Publishing it as an RDF vocabulary allows data publishers to extend it according to their needs.</li>
+						<li><strong>Reuse of external data sources.</strong> Many sources in the Linked Data cloud contain information that is also useful in a humanitarian context, such as geographic or demographic data. </li>
+						<li><strong>Semantic annotations.</strong> An XML schema strongly focuses on <em>syntactic</em> interoperability. In Linked Data, RDF provides the syntax, and shared vocabularies define the <em>semantics</em> of the shared data.</li>
+						<li><strong>Standardized API.</strong> Data access works through standard HTTP requests, and the data can be queried in the <a href="#sparql">SPARQL query language</a>.</li>
+						<li><strong>Inference capabilities.</strong> The structure of the shared vocabularies supports <a href="http://en.wikipedia.org/wiki/Inference">inference</a> (also referred to as reasoning) on the data.</li>
+						<li><strong>Success stories.</strong> The Linked Data approach has generated a number of impressive <a href="http://answers.semanticweb.com/questions/1533/what-are-the-success-stories-of-the-semantic-weblinked-data">success stories</a>, including the BBC and BestBuy.</li>
+						<li><strong>Future-proofness.</strong> This is obviously always a bet, but we had the feeling (given the arguments above) that following the Linked Data approach is future proof in the medium to long term.</li>
+					</ul>
+					
   				<h3 id="ld-further">Further reading</h3>
 
-  					<p>Obviously, we can only scratch on the surface of Linked Data here. For a more detailed introduction, we recommend the book <em>Linked Data: Evolving the Web into a Global Data Space</em> by <a href="http://tomheath.com/">Tom Heath</a> and <a href="http://dws.informatik.uni-mannheim.de/en/people/professors/prof-dr-christian-bizer/">Chris Bizer</a>. You can read the whole book <a href="http://linkeddatabook.com">online for free</a>.</p>
-  				
+  					<p>Obviously, we can only scratch on the surface of Linked Data here. For a more detailed introduction, we recommend the book <em>Linked Data: Evolving the Web into a Global Data Space</em> by <a href="http://tomheath.com/">Tom Heath</a> and <a href="http://dws.informatik.uni-mannheim.de/en/people/professors/prof-dr-christian-bizer/">Chris Bizer</a>. You can read the whole book <a href="http://linkeddatabook.com">online for free</a>. Moreover, <a href="http://linkeddata.org/">linkeddata.org</a> offers a list with <a href="http://linkeddata.org/guides-and-tutorials">guides and tutorials</a>.</p>
+   			
+
+
+<!--   SPARQL 101 SECTION  -->
+
+
+
+
   			<h2 id="sparql">SPARQL 101</h2>
 
-  				<p>So far, we have a structure where we can jump from one dataset to the next, browsing the Web of Data by <em>following your nose</em>. While that is a nice thing to have, what if we want to find all resources that match a certain criterion? Enter <a href="http://www.w3.org/TR/sparql11-query/">SPARQL</a>.
-
-  				<h3>SPARQL endpoints</h3>
-  					
-  					<p>TBD: While it is possible and already a step forward to... Standardized API</p>
+  				<p>So far, we have a structure where you can jump from one dataset to the next, browsing the Web of Data by <em>following your nose</em>. While that is a nice thing to have, what if we want to find all resources that match a certain criterion? Enter <a href="http://www.w3.org/TR/sparql11-query/">SPARQL</a>. The SPARQL query language defines a standard (currently a W3C recommendation) that supports such queries against <a href="http://en.wikipedia.org/wiki/Triplestore">triple stores</a>, i.e., databases optimzed for RDF storage.</p>
   				
   				<h3>Basic queries</h3>
   					
-  					<p>TBD: If you are familiar with SQL, you will find many similarities in SPARQL. The big difference obviously is that we are querying graphs now, not tables in a database.</p>
+  					<p>If you are familiar with SQL, you will find many similarities in SPARQL. The big difference obviously is that we are querying graphs now, not tables in a relational database. In a SPARQL query, we define a graph pattern with a number of variables, and the result is the set of values for these variables for each match. As a starting example, following query asks for ten arbitrary triples:</p>
 
+  					<pre class="prettyprint linenums">SELECT * WHERE {
+   ?a ?b ?c . 
+} LIMIT 10</pre><a href="http://sparql.carsten.io/?query=SELECT%20*%20WHERE%20%7B%0A%20%20%3Fa%20%3Fb%20%3Fc%20.%0A%7D%0ALIMIT%2010&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+
+					<p>The <code>*</code> in the <code>SELECT</code> clause means that we want to return the values for all variables in the <code>WHERE</code> clause, which picks random triples (subject (<code>?a</code>), predicate  (<code>?b</code>), and object (<code>?c</code>) are not restricted in any way). The number of results to return is then limited to 10 &ndash; without this restriction, this clause would return <em>all</em> triples in the store.</p>
+
+					<p>A SPARQL query is sent as an HTTP request to a <em>SPARQL endpoint</em>. <strong>The SPARQL endpoint for the HXL triple store is at <code>http://hxl.humanitarianresponse.info/sparql</code>.</strong></p>
+
+					<p>Since there is no database schema for a triple store, one of the first things to do when interacting with a new endpoint is often to explore its contents. To do this, we can easily ask for the different kinds of things the triple store hosts:</p>
+
+					<pre class="prettyprint linenums">SELECT DISTINCT ?type WHERE {
+   ?thing a ?type . 
+}</pre><a href="http://sparql.carsten.io/?query=SELECT%20DISTINCT%20%3Ftype%20WHERE%20%7B%0A%20%20%20%3Fthing%20a%20%3Ftype%20.%20%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+
+					<p>In this case, we only ask for values for the <code>?type</code> variable (note that the variable names are completely arbitrary; we usually try to pick something meaningful that makes it easier to read the queries, though). The <code>DISTINCT</code> keyword makes sure that we don't get any duplicates. A look at the <code>WHERE</code> clause shows that the <code>?type</code> variable is used for the object of the triple. The predicate is a simple <code>a</code>, which is a shortcut for the <code>rdf:type</code> property that makes RDF resources instances of a class. Hence, this query gives us all classes that the triple store contains instances of.</p>
+
+					<p>Likewise, we can ask for all the predicates used in the triple store:</p>
+
+					<pre class="prettyprint linenums">SELECT DISTINCT ?predicate WHERE {
+   ?subject ?predicate ?object . 
+}</pre><a href="http://sparql.carsten.io/?query=SELECT%20DISTINCT%20%3Fpredicate%20WHERE%20%7B%0A%20%20%20%3Fsubject%20%3Fpredicate%20%3Fobject%20.%20%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+
+					These very simple examples illustrate the basics of SPARQL; we will show some more complex examples <a href="examples">below</a>.
 
   				<h3>Tools</h3>
 
-  					<p>TBD: online editor, cURL, sparqllib, ...</p>
+  					<p>SPARQL is based on HTTP, so any tool that can fire an HTTP request can query a SPARQL endpoint (<a href="http://hxl.humanitarianresponse.info/sparql?query=prefix%20foaf%3A%20%3Chttp%3A//xmlns.com/foaf/0.1/%3E%20%0A%0ASELECT%20*%20WHERE%20%7B%0A%20%20%3Fagent%20a%20foaf%3APerson%20.%0A%7D">even your browser</a> &ndash; clicking this link should download an XML-encoded SPARQL results file to your computer). However, this is obviously not the most convenient way. Trying out queries is easier in an editor with proper syntax highlighting such as the one at <a href="http://sparql.carsten.io/">sparql.carsten.io</a>. Once you want to process the results programmatically, using libraries such as <a href="http://graphite.ecs.soton.ac.uk/sparqllib/">sparqllib</a> (PHP) or <a href="http://www.openrdf.org">Jena</a> (Java) come in handy. As with all things HTTP, <a href="http://curl.haxx.se">cURL</a> is extremely useful for testing and debugging. </p>
 
   				<h3 id="sparql-further">Further reading</h3>
   					<p>For further reading, we recommend the <a href="http://www.cambridgesemantics.com/de/semantic-university/sparql-by-example">SPARQL by Example</a> introduction over at Cambridge Semantics, and the W3C's <a href="http://www.w3.org/TR/sparql11-query/">SPARQL 1.1 working draft</a>, which has all the details, along with some handy examples.</p>  				
   			
+
+
+<!--   HXL BY EXAMPLE SECTION  -->
+
+
+
   			<h2 id="examples">HXL by Example</h2>
-  				<p>yadda... Reading the <a href="http://hxl.humanitarianresponse.info/ns/">vocabulary documentation</a> will help you phrase your queries.</p>
+  				<p>This section demonstrates how to query HXL by a number of common examples. We won't be able to cover ever possible query that you can make against our store, but the examples should get you started and allow you to extent them to build your own queries. Reading the <a href="http://hxl.humanitarianresponse.info/ns/">vocabulary documentation</a> will help you phrase your queries.</p>
 
   				<h3>Query by type</h3>
   				<div class="example">
@@ -136,11 +184,10 @@ SELECT * WHERE {
   					<p>This query gets all facts about a specific resource (Burkina Faso in this example) : </p>
 				</div>
 				<pre class="prettyprint linenums">prefix hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
-
-SELECT * WHERE {
-   ?apl a hxl:APL ;
-        hxl:featureRefName ?name .
-} ORDER BY ?name</pre><a href="http://sparql.carsten.io/?query=prefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%20%0ASELECT%20*%20WHERE%20%7B%0A%20%20%20%3Fapl%20a%20hxl%3AAPL%20%3B%0A%20%20%20%20%20%20%20%20hxl%3AfeatureRefName%20%3Fname%20.%0A%7D%20ORDER%20BY%20%3Fname&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+ 
+ SELECT * WHERE {
+   &lt;http://hxl.humanitarianresponse.info/data/locations/admin/bfa/BFA&gt; ?pred ?obj .
+}</pre><a href="http://sparql.carsten.io/?query=prefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%20%0ASELECT%20*%20WHERE%20%7B%0A%0A%20%20%3Chttp%3A//hxl.humanitarianresponse.info/data/locations/admin/bfa/BFA%3E%20%3Fpred%20%3Fobj%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
 
 				<h3>Query specific property</h3>
   				<div class="example">
@@ -149,7 +196,7 @@ SELECT * WHERE {
 				<pre class="prettyprint linenums">PREFIX hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
 
 SELECT DISTINCT ?title WHERE {
-   <http://hxl.humanitarianresponse.info/data/agegroups/unhcr/ages_0-4> hxl:title ?title .
+   &lt;http://hxl.humanitarianresponse.info/data/agegroups/unhcr/ages_0-4&gt; hxl:title ?title .
 }</pre><a href="http://sparql.carsten.io/?query=PREFIX%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20DISTINCT%20%3Ftitle%20WHERE%20%7B%0A%20%20%3Chttp%3A//hxl.humanitarianresponse.info/data/agegroups/unhcr/ages_0-4%3E%20hxl%3Atitle%20%3Ftitle%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
 
 				<h3>Query by datacontainer</h3>
