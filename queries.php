@@ -20,6 +20,7 @@ getHead("queries.php");
 				          <li><a href="#sparql">SPARQL 101 <i class="icon-chevron-right pull-right"></i></a></li>
 				          <li><a href="#examples">HXL by Example <i class="icon-chevron-right pull-right"></i></a></li>
 				          <li><a href="#geo">Geodata in HXL <i class="icon-chevron-right pull-right"></i></a></li>
+				          <li><a href="#tldr">TL;DR <i class="icon-chevron-right pull-right"></i></a></li>
 			        </ul>		
 			    </div>	    
   			</div>
@@ -220,7 +221,7 @@ SELECT DISTINCT * WHERE {
 
 				<h3>Property path queries</h3>
   				<div class="example">
-  					<p>A new feature in SPARQL 1.1 makes complex queries a snap. <a href="http://www.w3.org/TR/sparql11-property-paths/">Property paths</a> allow us to query along the graph without prior knowledge of how deep we need to go with this query. For example, this query gets all places within Burkina Faso (note that in our data, every place is only linked to the containing administrative unit via the <a href="http://hxl.humanitarianresponse.info/ns/#atLocation">at location</a> property):</p>
+  					<p>A new feature in SPARQL 1.1 makes complex queries a snap. <a href="http://www.w3.org/TR/sparql11-property-paths/">Property paths</a> allow us to query along the graph without prior knowledge of how deep we need to go with this query. For example, this query gets all places within Burkina Faso (note that in our data, every place is linked to the containing administrative unit via the <a href="http://hxl.humanitarianresponse.info/ns/#atLocation">at location</a> property; see the <a href="#geo">Geoata section</a> below for details):</p>
 				</div>
 				<pre class="prettyprint linenums">PREFIX hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
 
@@ -263,8 +264,64 @@ SELECT (MAX(?valid) as ?latest) ?location ?locationName ?wkt (SUM(?count) AS ?to
 } GROUP BY ?location ?locationName ?wkt 
 ORDER BY ?locationName</pre><a href="http://sparql.carsten.io/?query=prefix%20ogc%3A%20%3Chttp%3A//www.opengis.net/ont/geosparql%23%3E%20%0Aprefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20%28MAX%28%3Fvalid%29%20as%20%3Flatest%29%20%3Flocation%20%3FlocationName%20%3Fwkt%20%28SUM%28%3Fcount%29%20AS%20%3FtotalRefugees%29%20WHERE%20%7B%0A%20%20%0A%20%20GRAPH%20%3Fg%20%7B%0A%20%20%20%20%3Fg%20hxl%3AaboutEmergency%20%3Chttp%3A//hxl.humanitarianresponse.info/data/emergencies/mali2012test%3E%20%3B%20%0A%20%20%20%20%20%20%20hxl%3AvalidOn%20%3Fvalid%20.%0A%20%20%20%20%3Fpop%20a%20hxl%3ARefugeesAsylumSeekers%20%3B%20%0A%20%20%20%20%20%20%20%20%20%20%20hxl%3ApersonCount%20%3Fcount%20%3B%0A%20%20%20%20%20%20%20%20%20%20%20hxl%3AatLocation%20%20%3Flocation%20.%0A%20%20%7D%0A%20%20%3Flocation%20hxl%3AfeatureName%20%3FlocationName%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20ogc%3AhasGeometry%20%3Fgeom%20.%0A%20%20%3Fgeom%20ogc%3AhasSerialization%20%3Fwkt%20.%0A%20%20%0A%7D%20GROUP%20BY%20%3Flocation%20%3FlocationName%20%3Fwkt%20ORDER%20BY%20%3FlocationName&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
 
+
+
+<!-- GEODATA SECTION -->
+
+
   			<h2 id="geo">Geodata in HXL</h2>
-  				<p>yadda...</p>
+  				
+  				<p>HXL will be the central source for geographic information provided by OCHA, in particular the <a href="http://cod.humanitarianresponse.info">common operational datasets</a> (CODs). We have already loaded the worldwide country boundaries, as well as the administrative units and populted places for the countries we are currently using during the test phase (i.e., the countries affected by the Mali crisis) into our triple store.</p>
+
+  				<h3>GeoSPARQL</h3>
+
+  				<p>HXL adopts the <a href="http://www.opengeospatial.org/standards/sfa">Simple Features</a> model defined by the <a href="http://www.opengeospatial.org/">Open Geospatial Consortium</a>, an industry standard that is widely adopted and has recently been ported to RDF in the <a href="http://www.opengeospatial.org/standards/geosparql">GeoSPARQL</a> specification. GeoSPARQL extends SPARQL with spatial query capabilities, such as topological queries ("give me all camps inside this administrative unit") or buffering ("give me all hospitals within 20km of this route"). Note that <strong>the HXL SPARQL endpoint does not support GeoSPARQL queries yet</strong>; however, we already use the GeoSPARQL ontology for the representation of our geographic information, so that we can easily add this functionality later.</p>
+
+  				<h3>Feature representation</h3>
+
+  				<p>The Simple Features model distinguishes between a Feature (such as a country, an administrative unit, or an airport), its geometry, the serialization of the geometry:</p>
+
+  				<p><img src="img/features.png" /></p>
+
+  				<p>Note that each feature can have several geometries, as the geometry may change over time. Moreover, it may be convenient to have both a point representation (e.g. for coarse mapping) and a detailed representation, e.g. as a polygon, for detailed mapping and analysis. Each of these geometries can have several serializations, e.g., as <a href="http://en.wikipedia.org/wiki/Well-known_text">well-known text</a> (WKT) and in the <a href="http://en.wikipedia.org/wiki/Geography_Markup_Language">Geography Markup Language</a> (GML). Currently, we only offer geometries in WKT, as they are both compact in storage and easy to convert to any other representation, such as GML, KML, or GeoJSON, using the functionality offered by <a href="http://postgis.refractions.net">PostGIS</a> or libraries such as <a href="https://github.com/phayes/geoPHP">GeoPHP</a>.</p> 
+
+  				<p>The following query demonstrates how to query the WKT representation of a specific feature (the country boundary for Niger in this case):</p>
+
+<pre class="prettyprint linenums">prefix ogc: &lt;http://www.opengis.net/ont/geosparql#>&gt;
+SELECT ?wkt WHERE {
+  &lt;http://hxl.humanitarianresponse.info/data/locations/admin/ner/NG&gt; ogc:hasGeometry ?geometry .
+  ?geometry ogc:hasSerialization ?wkt .
+}</pre><a href="http://sparql.carsten.io/?query=prefix%20ogc%3A%20%3Chttp%3A//www.opengis.net/ont/geosparql%23%3E%0A%0ASELECT%20%3Fwkt%20WHERE%20%7B%0A%20%20%3Chttp%3A//hxl.humanitarianresponse.info/data/locations/admin/ner/NG%3E%20ogc%3AhasGeometry%20%3Fgeometry%20.%0A%20%20%3Fgeometry%20ogc%3AhasSerialization%20%3Fwkt%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>  				
+
+  				<h3>HXL administrative hierarchy</h3>
+
+  				<p>The administrative hierarchy in HXL is organized around administrative unit levels, where the countries are at level 0. The hierarchy below country level differs from country to country, as each country has its own hierarchy system. HXL therefore adopts the commonly used approach to number the levels, where 1 is directly below country level, the 2, then 3, etc. The depth of the hierarchy may again be different from country to country. In HXL, each populated place and admin unit is linked to the <em>containing</em> admin unit via the <code>hxl:atLocation</code> property. As an example, a populated place may be linked to its containing admin unit at level 2, which is in turn linked to its containing admin unit at level 1, which is linked to the containing country. This way, we can easily query e.g. all admin units inside a specific country:</p>
+
+  				<pre class="prettyprint linenums">prefix hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
+
+SELECT ?place WHERE {
+  ?place hxl:atLocation &lt;http://hxl.humanitarianresponse.info/data/locations/admin/ner/NG&gt; .
+}</pre><a href="http://sparql.carsten.io/?query=prefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20%3Fplace%20WHERE%20%7B%0A%20%20%3Fplace%20hxl%3AatLocation%20%3Chttp%3A//hxl.humanitarianresponse.info/data/locations/admin/ner/NG%3E%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+
+	  			<p>Note that this query will only return places and admin units that are <em>directly</em> linked to Niger via the <code>hxl:atLocation</code> property. In order to follow the <code>hxl:atLocation</code> hierarchy, we need a <a href="http://www.w3.org/TR/sparql11-property-paths/">property path</a> query. This example retrieves the whole admin hierarchy for <a href="http://hxl.humanitarianresponse.info/data/locations/admin/bfa/BFA050003122">Koutiala</a> in Burkina Faso; it also shows that each admin unit has a unique p-code that reflects the place hierarchy:</p>
+
+<pre class="prettyprint linenums">prefix hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
+
+SELECT * WHERE {
+  &lt;http://hxl.humanitarianresponse.info/data/locations/admin/bfa/BFA050003122&gt; hxl:atLocation* ?place .
+  ?place hxl:pcode ?pcode .
+}</pre><a href="http://sparql.carsten.io/?query=prefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20*%20WHERE%20%7B%0A%20%20%3Chttp%3A//hxl.humanitarianresponse.info/data/locations/admin/bfa/BFA050003122%3E%20hxl%3AatLocation*%20%3Fplace%20.%0A%20%20%3Fplace%20hxl%3Apcode%20%3Fpcode%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+  				
+  				<p>On top of the RDF representation for the geographic information in HXL, we will also offer standard OGC services (<a href="http://en.wikipedia.org/wiki/Web_Map_Service">WMS</a> and <a href="http://en.wikipedia.org/wiki/Web_Feature_Service">WFS</a>) that are kept in sync with the HXL triple store. We are currently testing the setup, and will enable public access as soon as possible.</p>
+
+
+<!-- TLDR / SUMMARY-->
+
+
+  			<h2 id="tldr">TL;DR<sup><a href="http://en.wiktionary.org/wiki/TL;DR">?</a></sup></h2>
+
+  			<p>HXL provides an RDF vocabulary that allows humanitarian data to be provided as Linked Data. Geographic information in HXL is encoded as defined by the GeoSPARQL spec. Our triple store can be queried at <code>http://hxl.humanitarianresponse.info/sparql</code>.</p>
+
   			</div>
 	  	</div>
 	</div>
