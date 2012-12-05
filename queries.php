@@ -210,6 +210,8 @@ SELECT DISTINCT ?title WHERE {
    }
 }</pre><a href="http://sparql.carsten.io/?query=SELECT%20DISTINCT%20*%20WHERE%20%7B%0A%20%20GRAPH%20%3Chttp%3A//hxl.humanitarianresponse.info/data/datacontainers/unocha/1344942253.196156%3E%20%7B%0A%20%20%20%20%3Fsubject%20%3Fpredicate%20%3Fobject%20.%0A%20%20%7D%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
 
+
+
 <div class="example">
   					<p>This query gets all datacontainers that are about the Mali emergency. </p>
 				</div>
@@ -218,6 +220,21 @@ SELECT DISTINCT ?title WHERE {
 SELECT DISTINCT * WHERE {
    ?container hxl:aboutEmergency <http://hxl.humanitarianresponse.info/data/emergencies/mali2012test> .
 }</pre><a href="http://sparql.carsten.io/?query=PREFIX%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20DISTINCT%20*%20WHERE%20%7B%0A%20%20%20%3Fcontainer%20hxl%3AaboutEmergency%20%3Chttp%3A//hxl.humanitarianresponse.info/data/emergencies/mali2012test%3E%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+				
+
+				<h3>Querying sets</h3>
+  				<div class="example">
+  					<p>Some of the HXL reference instances, such as the age groups, are organized into sets because each organization may define their own age group break down. This query gets all groups within a specific age group set (the one provided by UNHCR in this case), along with their respective group boundaries.</p>
+				</div>
+				<pre class="prettyprint linenums">prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; 
+prefix hxl: &lt;http://hxl.humanitarianresponse.info/ns/#&gt;
+
+SELECT * WHERE {
+  &lt;http://hxl.humanitarianresponse.info/data/agegroupsets/unhcr&gt; rdfs:member ?group .
+  ?group hxl:fromAge ?from ;
+         hxl:toAge ?to .
+}</pre><a href="http://sparql.carsten.io/?query=prefix%20rdfs%3A%20%3Chttp%3A//www.w3.org/2000/01/rdf-schema%23%3E%20%0Aprefix%20hxl%3A%20%3Chttp%3A//hxl.humanitarianresponse.info/ns/%23%3E%0A%0ASELECT%20*%20WHERE%20%7B%0A%20%20%3Chttp%3A//hxl.humanitarianresponse.info/data/agegroupsets/unhcr%3E%20rdfs%3Amember%20%3Fgroup%20.%0A%20%20%3Fgroup%20hxl%3AfromAge%20%3Ffrom%20%3B%0A%20%20%20%20%20%20%20%20%20hxl%3AtoAge%20%3Fto%20.%0A%7D&endpoint=http%3A//hxl.humanitarianresponse.info/sparql" class="btn pull-right execute" target="_blank">Execute <i class="icon-play"></i></a>
+
 
 				<h3>Property path queries</h3>
   				<div class="example">
