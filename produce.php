@@ -101,7 +101,7 @@ getHead("produce.php", $user_name, $user_organisation);
 
 		        <h2 id="tldr">TL;DR</h2>
 
-		        <p>Different kinds of structured input formats can be translated into HXL, often by using existing tools. Depending on the contents of the source data, an extensions to the HXL vocabulary may be required. In any case, the existing HXL URI patterns should be implemented. The produced RDF can either be stored on the official HXL store, or on your own triple store.</p>
+		        <p>Different kinds of structured input formats can be translated into HXL, often by using existing tools. Depending on the contents of the source data, extensions to the HXL vocabulary may be required. In any case, the existing HXL URI patterns should be implemented. The produced RDF can either be stored on the official HXL store, or on your own triple store.</p>
 	      	</div>
 	  	</div>
 	</div>
