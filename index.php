@@ -24,7 +24,7 @@ getHead("index.php");
         <div class="row">
 	      <div class="span4">
 	        <h2><a href="queries.php">Querying HXL.</a></h2>
-	        <p>HXL is built around the idea of <a href="http://linkeddata.org/">Linked Data</a>, using Semantic Web standards to annotate and publish humanitarian data, and make them queriable. If you don't know anything about RDF, SPARQL and the likes, we'll show you what you need to know to <a href="query.php">query</a> HXL and work with the data.</p>
+	        <p>HXL is built around the idea of <a href="http://linkeddata.org/">Linked Data</a>, using Semantic Web standards to annotate and publish humanitarian data, and make them queriable. If you don't know anything about RDF, SPARQL and the likes, we'll show you what you need to know to <a href="queries.php">query</a> HXL and work with the data.</p>
 	      </div>
 	      <div class="span4">
 	        <h2><a href="produce.php">Producing HXL.</a></h2>
