@@ -54,7 +54,13 @@ echo'
             </ul>
           </div>
       </div>
-    </div>    
+    </div>   
+
+    <!-- notice about new HXL work -->
+    <div class="container alert alert-danger">
+    <b>Notice</b>: The material on this web site represents proof-of-concept work undertaken during 2012 and 2013, and is preserved here online for historical reference. Through generous support from the Humanitarian Innovation Fund, OCHA is now engaging with a focused group of partners to gain consensus on technical standards for the exchange of humanitarian operational data, which may differ substantially from those described here. Please follow the HXL <a href="http://hxl.humanitarianresponse.info/blog/">blog</a> and <a href="https://groups.google.com/forum/?fromgroups#!forum/hxlproject">mailing list</a> for updates.
+  </div>
+     
 
 '; 
 
@@ -79,7 +85,7 @@ function getFoot(){
 		  This site is part of the HumanitarianResponse network. Write to 
 		  <a href="mailto:info@humanitarianresponse.info">info@humanitarianresponse.info</a> for more information.</div>
 		  <div class="span3"><strong>Updates</strong><br />
-		  This part of the docs has been last updated on <strong><?php // echo date("M d, Y", filemtime(pathinfo($_SERVER['REQUEST_URI'])['basename']));  ?> Nov 8, 2012</strong> by <a href="http://carsten.io">Carsten Keßler</a>.
+		  This part of the docs has been last updated on <strong><?php // echo date("M d, Y", filemtime(pathinfo($_SERVER['REQUEST_URI'])['basename']));  ?> Jan 10, 2014</strong> by <a href="http://carsten.io">Carsten Keßler</a>.
       </div>
       <div class="span3"><strong>Elsewhere</strong><br />
       The entire code for HXL and the tools we are building around the standard is available on <a href="https://github.com/hxl-team">GitHub</a>.</div>      

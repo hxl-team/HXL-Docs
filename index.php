@@ -10,7 +10,7 @@ getHead("index.php");
 
 ?>
 
-    <div class="container start">	    
+	<div class="container start">	    
     	<div class="row">
 	     	<div class="span4" style="text-align: center">
 	    		<img src="img/book.png" />
